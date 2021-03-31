@@ -203,5 +203,5 @@ if __name__ == "__main__":
         df_cleaned = df_cleaned.dropna()
         df_cleaned = df_cleaned.drop_duplicates()
         df_cleaned.to_csv(clean_tsv_path, sep='\t', header=None, index=False)
-        separate_corpus(0, clean_tsv_path, src_file + '.clean')
-        separate_corpus(1, clean_tsv_path, tgt_file + '.clean')
+        separate_corpus(0, clean_tsv_path, src_file)
+        separate_corpus(1, clean_tsv_path, tgt_file)
