@@ -172,18 +172,35 @@ def read_lines(path):
     return lines
 
 
+# def get_overlap(df1, df2):
+#     return list(set(df1) & set(df2))
+
 def get_overlap(df1, df2):
-    return list(set(df1) & set(df2))
+    len_before = len(df1)
+    df1 = df1[~df1[0].isin(df2[0]) & ~df1[1].isin(df2[1])]
+    len_after = len(df1)
+    print(
+        f'Sizes after overlap removal: {len_before} -> {len_after}. Number of overlaps: {len_before - len_after}')
+    return df
 
 
 def get_union(df1, df2):
     return list(set(df1) | set(df2))
 
 
+# def remove_duplicates(df1, df2):
+#     len_before = len(df1)
+#     df = set(df1) - set(df2)
+#     len_after = len(df)
+#     print(
+#         f'Sizes after overlap removal: {len_before} -> {len_after}. Number of overlaps: {len_before - len_after}')
+#     return df
+
 def remove_duplicates(df1, df2):
+    # remove duplicates between df1 and df2 from df1
     len_before = len(df1)
-    df = set(df1) - set(df2)
-    len_after = len(df)
+    df1 = df1[~df1[0].isin(df2[0]) & ~df1[1].isin(df2[1])]
+    len_after = len(df1)
     print(
         f'Sizes after overlap removal: {len_before} -> {len_after}. Number of overlaps: {len_before - len_after}')
     return df
@@ -224,9 +241,12 @@ def clean_and_sep_corpuses(langs):
         train_outfile1 = f'train/all/en-{lang}/train.en'
         train_outfile2 = f'train/all/en-{lang}/train.{lang}'
 
-        dev = read_lines(f'devtest/all/en-{lang}/dev-en-{lang}-unique.tsv')
-        test = read_lines(f'devtest/all/en-{lang}/test-en-{lang}-unique.tsv')
-        train = read_lines(f'train/all/en-{lang}/train-en-{lang}-unique.tsv')
+        # dev = read_lines(f'devtest/all/en-{lang}/dev-en-{lang}-unique.tsv')
+        # test = read_lines(f'devtest/all/en-{lang}/test-en-{lang}-unique.tsv')
+        # train = read_lines(f'train/all/en-{lang}/train-en-{lang}-unique.tsv')
+        dev = read_tsv(f'devtest/all/en-{lang}/dev-en-{lang}-unique.tsv')
+        test = read_tsv(f'devtest/all/en-{lang}/test-en-{lang}-unique.tsv')
+        train = read_tsv(f'train/all/en-{lang}/train-en-{lang}-unique.tsv')
         # remove overlap between dev and test
         dev = remove_duplicates(dev, test)
         create_sep_corpuses(
@@ -237,8 +257,6 @@ def clean_and_sep_corpuses(langs):
             dev, dev_outfile1, dev_outfile2)
 
         devtest = get_union(dev, test)
-        train_overlap = get_overlap(train, devtest)
-        print("Overlap between train and devtest: ", len(train_overlap))
         train = remove_duplicates(train, devtest)
         create_sep_corpuses(
             f'train/all/en-{lang}/en-{lang}-final.tsv',
@@ -414,4 +432,3 @@ if __name__ == "__main__":
     final_train_dataset_stats.to_csv('train_stats.csv')
     final_dev_dataset_stats.to_csv('dev_stats.csv')
     final_test_dataset_stats.to_csv('test_stats.csv')
-
