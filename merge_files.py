@@ -230,7 +230,11 @@ def create_sep_corpuses(tsvpath, lines, outfile1, outfile2):
     # creates the tsv file containing parallel data and also seperate txt files
     # for each language
 
-    create_txt(tsvpath, lines)
+    # create_txt(tsvpath, lines)
+    if isinstance(lines, pd.DataFrame):
+        lines.to_csv(tsvpath, lines, header=None, sep='\t', index=False)
+    elif isinstance(lines, list):
+        create_txt(tsvpath, lines)
     # outfile1 is {split}.en
     separate_corpus(1, tsvpath, outfile1)
     # outfile1 is {split}.{lang}
