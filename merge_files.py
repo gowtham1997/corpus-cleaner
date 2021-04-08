@@ -226,13 +226,32 @@ def create_txt(outFile, lines, add_newline=False):
     outfile.close()
 
 
+def create_tsv(tsvpath, lines):
+    src = list(lines[0].values)
+    tgt = list(lines[1].values)
+    with open("{0}".format(tsvpath), "w") as zh:
+        # Read first file
+        xlines = src
+        # Read second file
+        ylines = tgt
+
+        assert len(xlines) == len(
+            ylines), f"{len(xlines) != len(ylines)}"
+
+        # Write to third file
+        for i in range(len(xlines)):
+            line = ylines[i].strip() + "\t" + xlines[i]
+            zh.write(line)
+
+
 def create_sep_corpuses(tsvpath, lines, outfile1, outfile2):
     # creates the tsv file containing parallel data and also seperate txt files
     # for each language
 
     # create_txt(tsvpath, lines)
     if isinstance(lines, pd.DataFrame):
-        lines.to_csv(tsvpath, lines, header=None, sep='\t', index=False)
+        # lines.to_csv(tsvpath, lines, header=None, sep='\t', index=False)
+        create_tsv(tsvpath, lines)
     elif isinstance(lines, list):
         create_txt(tsvpath, lines)
     # outfile1 is {split}.en
