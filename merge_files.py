@@ -5,6 +5,8 @@ import os
 import re
 from tqdm import tqdm
 import argparse
+import pandas as pd
+import csv
 
 
 # def _parse_sgm(path):
@@ -44,7 +46,14 @@ def remove_file(path):
         os.remove(path)
 
 
+def read_tsv(path):
+    df = pd.read_csv(path, sep='\t', header=None,
+                     quoting=csv.QUOTE_NONE)
+    return df
+
 # below is for dropping duplicate from text file
+
+
 def drop_duplicate(inFile, outFile, return_lines=False):
     # taken from https://github.com/project-anuvaad/OpenNMT-py/blob/master/corpus/file_cleaner.py
     lines = set()
@@ -181,7 +190,7 @@ def get_overlap(df1, df2):
     len_after = len(df1)
     print(
         f'Sizes after overlap removal: {len_before} -> {len_after}. Number of overlaps: {len_before - len_after}')
-    return df
+    return df1
 
 
 def get_union(df1, df2):
@@ -203,7 +212,7 @@ def remove_duplicates(df1, df2):
     len_after = len(df1)
     print(
         f'Sizes after overlap removal: {len_before} -> {len_after}. Number of overlaps: {len_before - len_after}')
-    return df
+    return df1
 
 
 def create_txt(outFile, lines, add_newline=False):
