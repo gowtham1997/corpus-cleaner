@@ -242,7 +242,7 @@ def create_tsv(tsvpath, lines):
 
         # Write to third file
         for i in range(len(xlines)):
-            line = ylines[i].strip() + "\t" + xlines[i]
+            line = str(ylines[i]).strip() + "\t" + str(xlines[i]) + '\n'
             zh.write(line)
 
 
@@ -257,9 +257,9 @@ def create_sep_corpuses(tsvpath, lines, outfile1, outfile2):
     elif isinstance(lines, list):
         create_txt(tsvpath, lines)
     # outfile1 is {split}.en
-    separate_corpus(1, tsvpath, outfile1)
+    separate_corpus(0, tsvpath, outfile1)
     # outfile1 is {split}.{lang}
-    separate_corpus(0, tsvpath, outfile2)
+    separate_corpus(1, tsvpath, outfile2)
 
 
 def clean_and_sep_corpuses(langs):
