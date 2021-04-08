@@ -193,8 +193,10 @@ def get_overlap(df1, df2):
     return df1
 
 
+# def get_union(df1, df2):
+#     return list(set(df1) | set(df2))
 def get_union(df1, df2):
-    return list(set(df1) | set(df2))
+    return pd.concat([df1, df2], ignore_index=True)
 
 
 # def remove_duplicates(df1, df2):
