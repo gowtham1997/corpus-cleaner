@@ -208,6 +208,13 @@ def remove_train_devtest_overlaps(train_dir, devtest_dir, many2many=False):
 
             overlaps = set(tgt_train_normalized) & set(tgt_devtest_normalized)
             tgt_overlaps.extend(list(overlaps))
+            # dictionaries offer o(1) lookup
+            src_overlaps_dict = {}
+            tgt_overlaps_dict = {}
+            for line in src_overlaps:
+                src_overlaps_dict[line] = 1
+            for line in tgt_overlaps:
+                tgt_overlaps_dict[line] = 1
 
             # loop to remove the ovelapped data
             idx = -1
@@ -215,9 +222,9 @@ def remove_train_devtest_overlaps(train_dir, devtest_dir, many2many=False):
                 zip(src_train_normalized, tgt_train_normalized), total=len_before
             ):
                 idx += 1
-                if src_line_norm in src_overlaps:
+                if src_overlaps_dict.get(src_line_norm, None):
                     continue
-                if tgt_line_norm in tgt_overlaps:
+                if tgt_overlaps_dict.get(tgt_line_norm, None):
                     continue
                 new_src_train.append(src_train[idx])
                 new_tgt_train.append(tgt_train[idx])
