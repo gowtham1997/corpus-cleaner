@@ -58,7 +58,7 @@ def strip_and_normalize(line):
     # one of the fastest way to add an exclusion list and remove that
     # list of characters from a string
     # https://towardsdatascience.com/how-to-efficiently-remove-punctuations-from-a-string-899ad4a059fb
-    exclist = string.punctuation
+    exclist = string.punctuation + '\u0964'
     table_ = str.maketrans("", "", exclist)
 
     line = line.replace(" ", "").lower()
