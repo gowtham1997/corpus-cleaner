@@ -182,6 +182,8 @@ if __name__ == "__main__":
 
     for lang in tqdm(langs):
         data_folder = f'{DATA_DIR}/en-{lang}'
+        if not os.path.exists(data_folder):
+            continue
         src_file = f'{data_folder}/train.en'
         tgt_file = f'{data_folder}/train.{lang}'
         clean_tsv_path = data_folder + f'/en-{lang}.tsv'
